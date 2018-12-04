@@ -49,10 +49,13 @@ class Book(object):
    print("{title}'s ISBN has been updated to {isbn}".format(title = self.title, isbn = self.isbn))
 
   def add_rating(self, rating):
-    if rating >= 0 and rating <= 4:
-      self.ratings.append(rating)
-    else:
-      print("Invalid rating! (must be between 0 and 4)")
+    try:
+      if 0 <= rating <= 4:
+        self.ratings.append(rating)
+      else:
+        return "Invalid rating"
+    except TypeError:
+      "Invalid Type."   
 
   def __eq__(self, other_book):
     return self.title == other_book.title and self.isbn == other_book.isbn
@@ -82,7 +85,7 @@ class Fiction(Book):
 
 
 # Non-Fiction, Book subclass
-class Non_Fiction(book):
+class Non_Fiction(Book):
   def __init__(self, title, subject, level, isbn):
     super().__init__(title, isbn)
     self.subject = subject
@@ -116,35 +119,24 @@ class TomeRater(object):
   def create_non_fiction(self, title, subject, level, isbn):
     return Non_Fiction(title, subject, level, isbn)
 
-#  def add_book_to_user(self, book, email, rating = None):
-#    user = self.users.get(email, "No user with email: {email}".format(email = email)
-#
-#     user.read_book(book, rating)
-#      book.add_rating(rating)
-#      if book in self.books:
-#        self.books[book] += 1
-#      else:
-#        self.books[book] = 1
-
-  def add_user(name, email, user_books = None):
+  def add_user(self, name, email, user_books = None):
     if email not in self.users:
       self.users[email] = User(name, email)
       if user_books is not None:
         for book in user_books:
           self.add_book_to_user(book, email)
     else:
-      print("{name} is already a user.".format(name = name)
+      print("{name} is already a user.".format(name = name))
 
   def add_book_to_user(self, book, email, rating = None):
-    user = self.users.get(email, "No user with email: {email}".format(email = email)
+    user = self.users.get(email, "No user with email: {email}".format(email = email))
     if user:
       user.read_book(book, rating)
       book.add_rating(rating)
       if book in self.books:
         self.books[book] += 1
       else:
-        self.books[book] = 1 
-
+        self.books[book] = 1
 
   def print_catalog(self):
     for book in self.books.keys():

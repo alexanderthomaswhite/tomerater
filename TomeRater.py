@@ -13,7 +13,7 @@ class User(object):
     print("{name}'s email has been changed to {email}".format(name = self.name, email = self.email)) 
 
   def __repr__(self):
-    return "user: {name}, email: {email}, books read: {num_books)}".format(name = self.name, email = self.email, num_books = len(self.books)) 
+    return "user: {name}, email: {email}, books read: {num_books}".format(name = self.name, email = self.email, num_books = len(self.books)) 
 
   def __eq__(self, other_user):
     return self.name == other_user.name and self.email == other_user.email
@@ -24,13 +24,7 @@ class User(object):
 
   # Returns average of ratings in self.books
   def get_average_rating(self):
-    rtngTotal = 0
-    bookCount = 0
-    for rating in self.books.values():
-      rtngTotal += rating
-      bookCount += 1
-    return rtngTotal / bookCount
-
+    return sum([rating for rating in self.books.values() if rating is not None]) / len(self.books)
 
 class Book(object):
   def __init__(self, title, isbn):
@@ -143,18 +137,28 @@ class TomeRater(object):
       print(book)
    
   def print_users(self):
-    for users in self.users.values():
+    for user in self.users.values():
       print(user)
 
   def most_read_book(self):
     readCount = 0
     mostRead = None
     for book in self.books:
-      nmrofReads = self.books[book]
+      nmrOfReads = self.books[book]
       if nmrOfReads > readCount:
         readCount = nmrOfReads
         mostRead = book
     return mostRead
+
+  def highest_rated_book(self):
+    highRating = 0
+    highestBook = None
+    for book in self.books:
+      avgRating = book.get_average_rating()
+      if avgRating > highRating:
+        highRating = avgRating
+        highestBook = book
+    return highestBook
 
   def most_positive_user(self):
     highestRating = 0
